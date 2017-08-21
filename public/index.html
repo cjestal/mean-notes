@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="notesApp">
+
+<head>
+  <title>MEAN Note App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css">
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+
+</head>
+
+<body ng-controller="notesController">
+
+  <section class="hero is-bold is-dark">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          MEAN Notes App
+        </h1>
+        <h2 class="subtitle">
+          Current Number of Notes: {{ notes.length }}
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <br>
+    <div class="columns">
+
+      <!-- Start form column -->
+      <div class="column">
+        <div id="note-form">
+          <form>
+
+            <div class="field">
+              <label class="label">Title</label>
+              <div class="control">
+                <input type="text" class="input" placeholder="Title goes here.." ng-model="formData.title">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Content</label>
+              <div class="control">
+                <textarea class="textarea" placeholder="Some cool note..." ng-model="formData.text"></textarea>
+              </div>
+            </div>
+
+            <a class="button is-primary" ng-click="addNote()">Add Note</a>
+          </form>
+        </div>
+      </div>
+
+      <!-- Start list column -->
+      <div class="column is-one-quarter" ng-show="notes.length != 0">
+        <div ng-repeat="note in notes">
+          <div class="card">
+            <div class="card-content">
+              <p class="title">{{ note.title }}</p>
+              <small>{{ note.created | date }}</small>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" ng-click="toggleModal(note)">View</a>
+              <a class="card-footer-item" ng-click="removeNote(note._id)">Delete</a>
+            </footer>
+          </div>
+          <br>
+        </div>
+      </div>
+    </div>
+
+    <!-- Start modal -->
+    <div ng-class="{'modal': isModal, 'is-active': showModal}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">{{modal.title}}</p>
+          <button class="delete" aria-label="close" ng-click="toggleModal()"></button>
+        </header>
+        <section class="modal-card-body">
+          {{modal.text}}
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-danger" ng-click="removeNote(modal._id)">Delete</button>
+          <small>Created on: {{modal.created | date}}</small>
+        </footer>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="core.js"></script>
+  <script src="js/controllers/mainController.js"></script>
+  <script src="js/services/httpService.js"></script>
+
+</body>
+
+</html>
